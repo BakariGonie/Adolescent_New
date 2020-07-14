@@ -37,7 +37,7 @@ class PopButtonState extends State<PopButton> {
 
   void selected(PopUp popUp) {
     if (popUp.id == 0) {
-
+      Navigator.pushNamed(context, '/profile');
     }
         if (popUp.id == 1) {
 
