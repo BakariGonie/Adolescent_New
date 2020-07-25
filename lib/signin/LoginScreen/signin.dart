@@ -2,7 +2,6 @@ import 'package:adolescentfinalyearproject/screens/landingPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:adolescentfinalyearproject/signin/HomeMain/userscreen.dart';
 import 'package:adolescentfinalyearproject/signin/SignUp/signupmain.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -178,7 +177,9 @@ class _SignIn extends State<SignIn> {
           await prefs.setString('id', documents[0]['id']);
           await prefs.setString('email', documents[0]['email']);
           await prefs.setString('password', documents[0]['password']);
+          await prefs.setString('confirmPassword', documents[0]['confirmPassword']);
           await prefs.setString('name', documents[0]['name']);
+          await prefs.setString('phone number', documents[0]['phone number']);
           await prefs.setString('gender', documents[0]['gender']);
           await prefs.setInt('age', documents[0]['age']);
           await prefs.setString('blood', documents[0]['blood']);

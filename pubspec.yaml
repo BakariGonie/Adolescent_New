@@ -35,6 +35,13 @@ dependencies:
   google_sign_in: ^4.1.1
   cloud_firestore: ^0.13.4+2
   firebase_storage: ^3.1.5
+  photo_view: ^0.9.2
+  firebase_messaging: ^6.0.13
+  flutter_local_notifications: ^1.4.3
+  url_launcher: ^5.4.10
+  flutter_app_badger: ^1.1.2
+  flutter_widgets: ^0.1.7+1
+
   #  flutter_chat: ^0.1.5
 
 
@@ -62,6 +69,8 @@ flutter:
      - assets/images/appicon512.png
      - assets/images/google_logo.png
      - assets/images/intro_bg.png
+     - assets/images/teen.png
+     - assets/images/picha.jpg
      - assets/customer-avatar.png
   #   - images/a_dot_ham.jpeg
 

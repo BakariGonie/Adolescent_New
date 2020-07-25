@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
 class SignUpForm extends StatefulWidget {
-  SignUpForm(this.emailTextController,
+  SignUpForm({this.emailTextController,
       this.passwordTextController,
       this.nameTextController,
+      this.mobileTextController,
+      this.confirmPasswordTextController,
       this.parentAction,
-      this.isWithSNS);
+      this.isWithSNS});
 
   final TextEditingController emailTextController;
   final TextEditingController passwordTextController;
   final TextEditingController nameTextController;
+  final TextEditingController mobileTextController;
+  final TextEditingController confirmPasswordTextController;
 
   final ValueChanged<List<dynamic>> parentAction;
 
@@ -31,9 +35,9 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: DateTime(DateTime.now().year-22, DateTime.now().month),
-        firstDate: DateTime(DateTime.now().year-60, DateTime.now().month, DateTime.now().day),
-        lastDate: DateTime(DateTime.now().year-18, DateTime.now().month, DateTime.now().day));
+        initialDate: DateTime(DateTime.now().year-10, DateTime.now().month),
+        firstDate: DateTime(DateTime.now().year-19, DateTime.now().month, DateTime.now().day),
+        lastDate: DateTime(DateTime.now().year-10, DateTime.now().month, DateTime.now().day));
     if (picked != null && picked != DateTime.now())
       setState(() {
         _selectDateString = "${picked.toLocal()}".split(' ')[0];
@@ -64,53 +68,8 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
               Radius.circular(25.0)
           ),
         ),
-        child: Column(
+        child: ListView(
           children: <Widget>[
-            SizedBox(
-              width: 360,
-              child: TextFormField(
-                enabled: !widget.isWithSNS,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    icon: Icon(Icons.mail, color: !widget.isWithSNS ? Colors.grey : Colors.grey[300],),
-                    labelText: 'Email',
-                    hintText: 'Type your email'
-                ),
-                validator: (String value) {
-                  if (value.trim().isEmpty) {
-                    return 'Email is required';
-                  }else {
-                    return null;
-                  }
-                },
-                style: TextStyle(color: !widget.isWithSNS ? Colors.black : Colors.grey[400]),
-                controller: widget.emailTextController,
-              ),
-            ),
-            Divider(),
-            SizedBox(
-              width: 360,
-              child: TextFormField(
-                enabled: !widget.isWithSNS,
-                obscureText: true,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    icon:Icon(Icons.lock, color: !widget.isWithSNS ? Colors.grey : Colors.grey[300],),
-                    labelText: !widget.isWithSNS ? 'Password' : 'Do not need a password',
-                    hintText: 'Type password'
-                ),
-                validator: (String value) {
-                  if (value.trim().isEmpty) {
-                    return 'Password is required';
-                  }else {
-                    return null;
-                  }
-                },
-                style: TextStyle(color: !widget.isWithSNS ? Colors.black : Colors.grey[300]),
-                controller: widget.passwordTextController,
-              ),
-            ),
-            Divider(),
             SizedBox(
               width: 360,
               child: TextFormField(
@@ -198,6 +157,110 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
                 ],
               ),
             ),
+            Divider(),
+            SizedBox(
+              width: 360,
+              child: TextFormField(
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  icon:Icon(Icons.phone),
+                  labelText: 'Phone',
+                  hintText: 'Type phone number',
+                ),
+                validator: (String value) {
+                  String pattern = r'(^[0-9]*$)';
+                  RegExp regExp = new RegExp(pattern);
+                  if (value.replaceAll(" ", "").isEmpty) {
+                    return 'Mobile is required';
+                  } else if (value.replaceAll(" ", "").length != 10) {
+                    return 'Mobile number must 10 digits';
+                  } else if (!regExp.hasMatch(value.replaceAll(" ", ""))) {
+                    return 'Mobile number must be digits';
+                  }
+                  return null;
+                },
+                controller: widget.mobileTextController,
+              ),
+            ),
+            Divider(),
+            SizedBox(
+              width: 360,
+              child: TextFormField(
+                enabled: !widget.isWithSNS,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    icon: Icon(Icons.mail, color: !widget.isWithSNS ? Colors.grey : Colors.grey[300],),
+                    labelText: 'Email',
+                    hintText: 'Type your email'
+                ),
+                validator: (String value) {
+                 String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\'
+                     r'.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                 RegExp regExp = new RegExp(pattern);
+                 if (value.isEmpty) {
+                   return "Email can't be empty";
+                 }
+                 if (!regExp.hasMatch(value)) {
+                   return 'Invalid email';
+                 }return null;
+                },
+                style: TextStyle(color: !widget.isWithSNS ? Colors.black : Colors.grey[400]),
+                controller: widget.emailTextController,
+              ),
+            ),
+            Divider(),
+            SizedBox(
+              width: 360,
+              child: TextFormField(
+                enabled: !widget.isWithSNS,
+                obscureText: true,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    icon:Icon(Icons.lock, color: !widget.isWithSNS ? Colors.grey : Colors.grey[300],),
+                    labelText: !widget.isWithSNS ? 'Password' : 'Do not need a password',
+                    hintText: 'Type password'
+                ),
+                validator: (String value) {
+                  if (value.trim().isEmpty) {
+                    return 'Password is required';
+                  }else if (value.length < 6) {
+                    return 'password must be at least 6 characters';
+                  }
+                  else {
+                    return null;
+                  }
+                },
+                style: TextStyle(color: !widget.isWithSNS ? Colors.black : Colors.grey[300]),
+                controller: widget.passwordTextController,
+              ),
+            ),
+            Divider(),
+            SizedBox(
+              width: 360,
+              child: TextFormField(
+                enabled: !widget.isWithSNS,
+                obscureText: true,
+                validator: (confirmation) {
+                  if (confirmation.length < 6) {
+                    return 'Confirm password must be at least 6 characters';
+                  }
+                  return confirmation.isEmpty
+                      ? 'Confirm password is required'
+                      : validationEqual(confirmation, widget.passwordTextController.text)
+                      ? null
+                      : 'Password not match';
+                },
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    icon:Icon(Icons.lock, color: !widget.isWithSNS ? Colors.grey : Colors.grey[300],),
+                    labelText: !widget.isWithSNS ? 'confirmPassword' : 'Do not need a confirmPassword',
+                    hintText: 'Type confirmPassword'
+                ),
+                style: TextStyle(color: !widget.isWithSNS ? Colors.black : Colors.grey[300]),
+                controller: widget.confirmPasswordTextController,
+              ),
+            ),
+            Divider(),
             SizedBox(
               width: 360,
               child: Padding(
@@ -235,7 +298,7 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
   void _showTermPolicy() {
     showDialog(context: context, child:
       new AlertDialog(
-        title: new Text("SignInExample's Terms of Services, Privacy Policy"),
+        title: new Text("Adolescent counseling Terms of Services, Privacy Policy"),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20.0))),
         content: Container(
@@ -245,9 +308,10 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Text(
-                    'Terms of Services, Privacy Policy' * 100
-                ),
+                Text('1. Insulting is not allowed',textAlign: TextAlign.left),
+                Text('2. Do not share false informations',textAlign: TextAlign.left),
+                Text('3. Advertising the use of drug is not allowed',textAlign: TextAlign.left),
+                Text('4. Do not share personal informations without consent',textAlign: TextAlign.left),
               ],
             ),
           ),
@@ -262,6 +326,13 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
         ],
       )
     );
+  }
+  bool validationEqual(String currentValue, String checkValue) {
+    if (currentValue == checkValue) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   void _passDataToParent(String key, dynamic value) {

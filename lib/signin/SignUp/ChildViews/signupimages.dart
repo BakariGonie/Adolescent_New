@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'dart:io';
+import 'dart:async';
 
 class SignUpImages extends StatefulWidget {
   SignUpImages(this.parentAction);
@@ -14,6 +15,8 @@ class _SignUpImages extends State<SignUpImages> with AutomaticKeepAliveClientMix
 
   int _imagePosition = 0;
   List<File> _imageList = List<File>.generate(4,(file) => File(''));
+
+  ImagePicker _imagePicker = new ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -129,8 +132,8 @@ class _SignUpImages extends State<SignUpImages> with AutomaticKeepAliveClientMix
 
   Future _getImage() async {
     // Get image from gallery.
-    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    _cropImage(image);
+    PickedFile image = await _imagePicker.getImage(source: ImageSource.gallery);
+    _cropImage(File(image.path));
   }
 
   Future<Null> _cropImage(File image) async {

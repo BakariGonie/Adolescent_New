@@ -6,7 +6,7 @@ Widget mainLogo() {
     child: Container(
       padding: EdgeInsets.fromLTRB(10,30,10,10),
       child:
-        Image.asset('assets/images/appicon512.png',
+        Image.asset('assets/images/teen.png',
           fit: BoxFit.fill,
         )
       ),

@@ -1,38 +1,76 @@
 import 'package:email_validator/email_validator.dart';
 
-class Validations{
-  String validateName(String value) {
-    if (value.isEmpty) return 'Name is required.';
-    final RegExp nameExp = new RegExp(r'^[A-za-z ]+$');
-    if (!nameExp.hasMatch(value))
-      return 'Please enter only alphabetical characters.';
+class NameValidator {
+  static String validate(String value) {
+    String pattern = r'(^[a-zA-Z ]*$)';
+    RegExp regExp = new RegExp(pattern);
+    if (value.isEmpty) {
+      return "Name can't be empty";
+    }
+    if (value.length < 2) {
+      return "Name must be at least 2 characters long";
+    }
+    if (value.length > 50) {
+      return "Name must be less than 50 characters long";
+    }
+    if (!regExp.hasMatch(value)) {
+      return 'Username must be a-z and A-Z';
+    }
+
     return null;
   }
+}
 
-  String validateEmail(String value) {
-    if (value.isEmpty) return 'Email is required.';
-    final bool isValid = EmailValidator.validate(value);
-    if (!isValid) return 'Invalid email address';
+class EmailValidator {
+  static String validate(String value) {
+    String pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regExp = new RegExp(pattern);
+    if (value.isEmpty) {
+      return "Email can't be empty";
+    }
+    if (!regExp.hasMatch(value)) {
+      return 'Invalid email';
+    }
     return null;
   }
+}
 
-  String validateMobileNumber(String value) {
-    if (value.isEmpty) return 'Phone number is required.';
-    final RegExp nameExp = new RegExp(r'^(?:[+0]9)?[0-9]{10}$');
-    if (!nameExp.hasMatch(value)) return 'Invalid Phone number';
-    return null;
-
-  }
-
-
-  String validatePassword(String value) {
-    if (value.isEmpty) return 'Password is missing or invalid.';
+class PasswordValidator {
+  static String validate(String value) {
+    if (value.isEmpty) {
+      return "Password can't be empty";
+    }
     return null;
   }
+}
 
-  String validateUserName(String value) {
-    if (value.isEmpty) return 'Username is missing or invalid.';
+class ComfirmPasswordValidator {
+  static String validate(String value) {
+    if (value.isEmpty) {
+      return 'Confirm password is required';
+    } else if (value.length < 6) {
+      return 'Confirm password must be at least 6 characters';
+    }
     return null;
   }
+}
 
+class MobileValidator {
+  static String validate(String value) {
+    String pattern = r'(^[0-9]*$)';
+    RegExp regExp = new RegExp(pattern);
+    if (value
+        .replaceAll(" ", "")
+        .isEmpty) {
+      return 'Mobile is required';
+    } else if (value
+        .replaceAll(" ", "")
+        .length != 10) {
+      return 'Mobile number must 10 digits';
+    } else if (!regExp.hasMatch(value.replaceAll(" ", ""))) {
+      return 'Mobile number must be digits';
+    }
+    return null;
+  }
 }

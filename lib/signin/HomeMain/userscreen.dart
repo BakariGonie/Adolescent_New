@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'package:adolescentfinalyearproject/common/popUpButton.dart';
-import 'package:adolescentfinalyearproject/screens/landingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:adolescentfinalyearproject/main.dart';
@@ -163,7 +161,7 @@ class _UserScreen extends State<UserScreen> with WidgetsBindingObserver{
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => PopButton()),
+      MaterialPageRoute(builder: (context) => MyHomePage()),
     );
   }
 }
