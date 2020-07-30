@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:adolescentfinalyearproject/screens/landingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:adolescentfinalyearproject/main.dart';
@@ -132,7 +133,11 @@ class _UserScreen extends State<UserScreen> with WidgetsBindingObserver{
         appBar: AppBar(
           centerTitle: true,
           title: Text('This is user screen'),
-          automaticallyImplyLeading: false,
+          leading: new IconButton(
+            icon: new Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          //automaticallyImplyLeading: false,
         ),
         body:
         _fetchingData ? CircularProgressIndicator() :
@@ -161,7 +166,7 @@ class _UserScreen extends State<UserScreen> with WidgetsBindingObserver{
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => MyHomePage()),
+      MaterialPageRoute(builder: (context) => LandingPage()),
     );
   }
 }

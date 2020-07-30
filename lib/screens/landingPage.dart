@@ -1,5 +1,7 @@
 import 'package:adolescentfinalyearproject/chat/chartLanding.dart';
 import 'package:adolescentfinalyearproject/common/popUpButton.dart';
+import 'package:adolescentfinalyearproject/container/homeItemList.dart';
+import 'package:adolescentfinalyearproject/container/homeView.dart';
 import 'package:adolescentfinalyearproject/screens/mapPinPointDirectives.dart';
 import 'package:adolescentfinalyearproject/screens/menuDrawer.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +16,9 @@ class _LandingPageState extends State<LandingPage> {
   int _pageIndex = 0;
 
   List<Widget> _widgets = <Widget>[
-    Container(),
+    HomeItemList(),
     MapPinPointDirectives(),
-    ChatLanding()
+    ChatLanding(),
   ];
 
   @override
