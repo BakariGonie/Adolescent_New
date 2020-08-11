@@ -98,7 +98,7 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
                   groupValue: _userGender,
                   onChanged: (GenderEnum value) {
                     setState(() {
-                      _passDataToParent('gender','Man');
+                      _passDataToParent('gender','Male');
                       _userGender = value;
                     });
                   },
@@ -106,11 +106,11 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
                 new GestureDetector(
                   onTap: () {
                     setState(() {
-                      _passDataToParent('gender','Man');
+                      _passDataToParent('gender','Male');
                       _userGender = GenderEnum.man;
                     });
                   },
-                  child: Text('Man'),
+                  child: Text('Male'),
                 ),
                 SizedBox(width: 20,),
                 Radio(
@@ -118,7 +118,7 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
                   groupValue: _userGender,
                   onChanged: (GenderEnum value) {
                     setState(() {
-                      _passDataToParent('gender','Woman');
+                      _passDataToParent('gender','Female');
                       _userGender = value;
                     });
                   },
@@ -126,11 +126,11 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
                 new GestureDetector(
                   onTap: () {
                     setState(() {
-                      _passDataToParent('gender','Woman');
+                      _passDataToParent('gender','Female');
                       _userGender = GenderEnum.woman;
                     });
                   },
-                  child: Text('Woman'),
+                  child: Text('Female'),
                 ),
               ],
             ),
@@ -139,6 +139,11 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
               width: 360,
               child:
               Row(
+                children: <Widget>[
+              Flexible(
+              child: Card(
+                child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Icon(Icons.cake,color: Colors.grey,),
                   Padding(
@@ -154,6 +159,10 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
                       ),
                     ),
                   ),
+                      ],
+                    ),
+                  ),
+            ),
                 ],
               ),
             ),

@@ -1,5 +1,10 @@
 
+import 'package:adolescentfinalyearproject/screens/about_app.dart';
+import 'package:adolescentfinalyearproject/screens/available_counselor.dart';
+import 'package:adolescentfinalyearproject/screens/contacts.dart';
+import 'package:adolescentfinalyearproject/screens/homePage.dart';
 import 'package:adolescentfinalyearproject/screens/landingPage.dart';
+import 'package:adolescentfinalyearproject/screens/specialPlaces.dart';
 import 'package:flutter/material.dart';
 import 'package:adolescentfinalyearproject/signin/LoginScreen/mainlogo.dart';
 import 'package:adolescentfinalyearproject/signin/LoginScreen/signin.dart';
@@ -21,6 +26,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
        '/profile': (context) => UserScreen(),
+       '/home': (context) => HomePage(),
+       '/available': (context) => AvailableCounselors(),
+       '/contacts': (context) => Contacts(),
+       '/about': (context) => AboutScreen(),
+        '/special':(context)=> SpecialPlaces(),
+
   }
     );
   }
@@ -59,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   @override
   Widget build(BuildContext context) {
-    return !_isLogin ? _signInWidget() : LandingPage();
+    return _isLogin ?LandingPage(): _signInWidget();
   }
 
   Widget _signInWidget() {
@@ -73,8 +84,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     fit: BoxFit.fill)
             ),
             child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: ListView(
+               // mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   mainLogo(),
                   SignIn(_updateLoadingStatus), // connecting with child view.

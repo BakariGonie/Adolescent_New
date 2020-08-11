@@ -92,8 +92,8 @@ class _SignUpWithMail extends State<SignUpMain> {
                         image: AssetImage('assets/images/intro_bg.png'),
                         fit: BoxFit.fill)),
                 child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: ListView(
+                    //mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
                         // white bg with radius.

@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "180735866673",
-    "firebase_url": "https://adolescent-app.firebaseio.com",
-    "project_id": "adolescent-app",
-    "storage_bucket": "adolescent-app.appspot.com"
+    "project_number": "355486033955",
+    "firebase_url": "https://fyp-web-app.firebaseio.com",
+    "project_id": "fyp-web-app",
+    "storage_bucket": "fyp-web-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:180735866673:android:c25ffe2f9c6ceb3752e210",
+        "mobilesdk_app_id": "1:355486033955:android:e18f75dff91ab5845b2996",
         "android_client_info": {
           "package_name": "com.mastertony.adolescentfinalyearproject"
         }
       },
       "oauth_client": [
         {
-          "client_id": "180735866673-5sa6r522qhugjnrs5b6dqape79qporp5.apps.googleusercontent.com",
+          "client_id": "355486033955-vqllu9s1q40gt39tpv228r77ai766p41.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDDXUQfQUiiAMv9NRo6ZyXa9--wPtj1Pg0"
+          "current_key": "AIzaSyDAP1FxWErwnbGCjwTQomELNY-my_e7Csk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "180735866673-5sa6r522qhugjnrs5b6dqape79qporp5.apps.googleusercontent.com",
+              "client_id": "355486033955-vqllu9s1q40gt39tpv228r77ai766p41.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -16,11 +16,14 @@ class SignIn extends StatefulWidget {
 class _SignIn extends State<SignIn> {
 
   final _emailTextController = TextEditingController();
+  final _emailTextResetController = TextEditingController();
   final _passwordTextController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void dispose() {
     _emailTextController.dispose();
+    _emailTextResetController.dispose();
     _passwordTextController.dispose();
     super.dispose();
   }
@@ -102,6 +105,16 @@ class _SignIn extends State<SignIn> {
                 ),
               ),
               Row(
+                mainAxisAlignment:MainAxisAlignment.end,
+                children: [
+                  FlatButton(
+                    onPressed: ()=>_resetPageDialog(),
+                    textColor: Colors.blue,
+                    child: Text('Forgot Password?'),
+                  ),
+                ],
+              ),
+              Row(
                 children: <Widget>[
                   Flexible(
                     child: Padding(
@@ -134,6 +147,11 @@ class _SignIn extends State<SignIn> {
             ],
           ),
         );
+  }
+
+  // Reset Password
+  Future sendPasswordResetEmail(String email) async {
+    return _auth.sendPasswordResetEmail(email: email);
   }
 
   Future<void> _signInWithMail() async {
@@ -211,6 +229,7 @@ class _SignIn extends State<SignIn> {
     }
   }
 
+
   showDialogWithText(String textMessage) {
     showDialog(
         context: context,
@@ -219,6 +238,57 @@ class _SignIn extends State<SignIn> {
             content: Text(textMessage),
           );
         }
+    );
+  }
+
+  //reset page dialog
+  void _resetPageDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Reset Password"),
+          content: new TextFormField(
+            decoration: InputDecoration(
+                border: InputBorder.none,
+                icon: Icon(Icons.mail),
+                labelText: 'Email',
+                hintText: 'Type your email'
+            ),
+            validator: (String value) {
+              if (value.trim().isEmpty) {
+                return 'Email is required';
+              }else {
+                return null;
+              }
+            },
+            controller: _emailTextResetController,
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Submit"),
+              onPressed: () async{
+try {
+  await _auth.sendPasswordResetEmail(email:_emailTextResetController.text.trim());
+}
+catch (e){
+  print(e);
+}
+Navigator.of(context).pop();
+                },
+            ),
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

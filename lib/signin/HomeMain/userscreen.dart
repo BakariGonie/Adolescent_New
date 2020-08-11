@@ -1,8 +1,9 @@
 import 'dart:io';
+import 'package:adolescentfinalyearproject/main.dart';
 import 'package:adolescentfinalyearproject/screens/landingPage.dart';
+import 'package:adolescentfinalyearproject/signin/LoginScreen/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:adolescentfinalyearproject/main.dart';
 
 class UserScreen extends StatefulWidget {
   @override
@@ -166,7 +167,7 @@ class _UserScreen extends State<UserScreen> with WidgetsBindingObserver{
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LandingPage()),
+      MaterialPageRoute(builder: (context) => MyHomePage()),
     );
   }
 }

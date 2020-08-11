@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 
 Widget mainLogo() {
   return
-    Expanded(
-    child: Container(
-      padding: EdgeInsets.fromLTRB(10,30,10,10),
-      child:
-        Image.asset('assets/images/teen.png',
-          fit: BoxFit.fill,
-        )
+    CircleAvatar(
+      radius: 90,
+      backgroundColor: Color(0xffFDCF09),
+      child: CircleAvatar(
+        radius: 85,
+        backgroundImage: AssetImage('assets/logo.jpg'),
       ),
-  );
+    );
 }

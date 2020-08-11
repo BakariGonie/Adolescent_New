@@ -1,4 +1,6 @@
+import 'package:adolescentfinalyearproject/container/homeItemList.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawerItem {
   String title;
@@ -17,12 +19,30 @@ class _MenuDrawerState extends State<MenuDrawer> {
     DrawerItem("Homepage", Icons.pageview),
     DrawerItem("Special_centres", Icons.directions),
     DrawerItem("Available_counselors", Icons.people),
-    DrawerItem("schedule", Icons.access_time),
     DrawerItem("about_app", Icons.apps),
     DrawerItem("contacts", Icons.phone),
+    DrawerItem("schedule", Icons.access_time),
   ];
+  Map<String, dynamic> _useData = Map<String, dynamic>();
+  bool _fetchingData = true;
+  Future<void> _getUserData() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        _useData['name'] = prefs.get('name');
+        _useData['email'] = prefs.get('email');
+        _fetchingData = false;
+      });
+    }catch(e) {
+    }
+  }
 
   int _selectedIndex = 0;
+  @override
+  void initState() {
+    _getUserData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,8 +82,8 @@ class _MenuDrawerState extends State<MenuDrawer> {
       child: new ListView(
         children: <Widget>[
           new UserAccountsDrawerHeader(
-            accountName: new Text("Util.userName"),
-            accountEmail: new Text("Util.emailId"),
+            accountName: new Text(_useData['name']),
+            accountEmail: new Text(_useData['email']),
 
             currentAccountPicture: new CircleAvatar(
                 maxRadius: 24.0,
@@ -87,7 +107,8 @@ class _MenuDrawerState extends State<MenuDrawer> {
   _setDrawerItemWidget(int pos) {
     switch (pos) {
       case 0:
-        Navigator.pushNamed(context, "/home");
+        Navigator.push(context, MaterialPageRoute(
+            builder: (context) => HomeItemList()),);
         break;
       case 1:
         Navigator.pushNamed(context, "/special");
@@ -96,12 +117,9 @@ class _MenuDrawerState extends State<MenuDrawer> {
         Navigator.pushNamed(context, "/available");
         break;
       case 3:
-      //Navigator.pushNamed(context, "/available");
-        break;
-      case 4:
         Navigator.pushNamed(context, "/about");
         break;
-      case 5:
+      case 4:
         Navigator.pushNamed(context, "/contacts");
         break;
     }

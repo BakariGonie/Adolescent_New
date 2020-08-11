@@ -1,138 +1,158 @@
+
+
+
+import 'dart:async';
+
+import 'package:adolescentfinalyearproject/container/articles.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class HomeItemList extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-    return ListItemWidget();
-  }
+  _HomeItemListState createState() => new _HomeItemListState();
 }
 
-class ListItemWidget extends State<HomeItemList> {
-  List items = getDummyList();
+class _HomeItemListState extends State<HomeItemList> {
+
+  StreamSubscription _subscriptionTodo;
+
+  String _todoName = "Display the todo name here";
+
+  @override
+  void initState() {
+    //FirebaseTodos.getTodo("-KriJ8Sg4lWIoNswKWc4").then(_updateTodo);
+
+    FirebaseTodos.getTodoStream("-KriJ8Sg4lWIoNswKWc4", _updateTodo)
+        .then((StreamSubscription s) => _subscriptionTodo = s);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (_subscriptionTodo != null) {
+      _subscriptionTodo.cancel();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: ListView.builder(
+    var itemTile = new ListTile(
+      title: new Text("$_todoName"),
+    );
 
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return Dismissible(
-              key: Key(items[index]),
-              background: Container(
-                alignment: AlignmentDirectional.centerEnd,
-                color: Colors.red,
-                child: Icon(
-                  Icons.delete,
-                  color: Colors.white,
-                ),
-              ),
-              onDismissed: (direction) {
-                setState(() {
-                  items.removeAt(index);
-                });
-              },
-              direction: DismissDirection.endToStart,
-              child: Card(
-                elevation: 5,
-                child: Container(
-                  height: 100.0,
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        height: 100.0,
-                        width: 70.0,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(5),
-                                topLeft: Radius.circular(5)
-                            ),
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage("https://is2-ssl.mzstatic.com/image/thumb/Video2/v4/e1/69/8b/e1698bc0-c23d-2424-40b7-527864c94a8e/pr_source.lsr/268x0w.png")
-                            )
-                        ),
-                      ),
-                      Container(
-                        height: 100,
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(10, 2, 0, 0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                items[index],
-
-                              ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(0, 3, 0, 3),
-                                child: Container(
-                                  width: 30,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.teal),
-                                      borderRadius: BorderRadius.all(Radius.circular(10))
-                                  ),
-                                  child: Text("3D",textAlign: TextAlign.center,),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(0, 5, 0, 2),
-                                child: Container(
-                                  width: 260,
-                                  child: Text("His genius finally recognized by his idol Chester",style: TextStyle(
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 48, 48, 54)
-                                  ),),
-
-
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        ));
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("home"),
+      ),
+      body: new ListView(
+        children: <Widget>[
+          itemTile,
+        ],
+      ),
+    );
   }
 
-  static List getDummyList() {
-    List list = List.generate(3, (i) {
-      return "Item ${i + 1}";
+
+  _updateTodo(Todo value) {
+    var name = value.title;
+    setState((){
+      _todoName = name;
     });
-    return list;
   }
 }
 
-//class HomeItemList extends StatefulWidget {
-//  @override
-//  _HomeItemListState createState() => _HomeItemListState();
-//}
 
-//class _HomeItemListState extends State<HomeItemList> {
-//  final List<String> names = <String>['Tony', 'Ben', 'Lymo', 'Said', 'Bob', 'Kasimu', 'Tina', 'Gonie'];
-//  @override
-//  Widget build(BuildContext context) {
-//     return Container(
-//        padding: new EdgeInsets.all(32.0),child: new Center(
-//    child: new Column(
-//    children: <Widget>[
-//      new Text('names', style: new TextStyle(fontWeight: FontWeight.bold),),
-//
-//    new Expanded(child: ListView.builder(
-//       padding: const EdgeInsets.all(8),
-//         itemCount: names.length,
-//         itemBuilder: (BuildContext contex, int index){
-//         return new Text(names.elementAt(index));
-//         }
-//    ),
-//    ),]
-//    ),
-//    ),
-//    );
-//  }
-//}
+
+
+
+class Todo {
+  final String key;
+  String article, author, sender, timestamp, title;
+
+
+  Todo.fromJson(this.key, Map data) {
+    article = data['article'];
+    author= data['author'];
+    sender = data['sender'];
+    timestamp = data['timestamp'];
+    title = data['title'];
+    if (article == null) {
+      article= '';
+    }
+  }
+}
+
+
+
+
+
+class FirebaseTodos {
+  /// FirebaseTodos.getTodoStream("-KriJ8Sg4lWIoNswKWc4", _updateTodo)
+  /// .then((StreamSubscription s) => _subscriptionTodo = s);
+  static Future<StreamSubscription<Event>> getTodoStream(String todoKey,
+      void onData(Todo todo)) async {
+    String articleKey = await Preferences.getAccountKey();
+
+    StreamSubscription<Event> subscription = FirebaseDatabase.instance
+        .reference()
+        .child("articles")
+        .child(articleKey)
+        .onValue
+        .listen((Event event) {
+      var todo = new Todo.fromJson(event.snapshot.key, event.snapshot.value);
+      onData(todo);
+    });
+
+    return subscription;
+  }
+
+  /// FirebaseTodos.getTodo("-KriJ8Sg4lWIoNswKWc4").then(_updateTodo);
+  static Future<Todo> getTodo(String todoKey) async {
+    Completer<Todo> completer = new Completer<Todo>();
+
+    String articleKey = await Preferences.getAccountKey();
+
+    FirebaseDatabase.instance
+        .reference()
+        .child("articles")
+        .child(articleKey)
+        .once()
+        .then((DataSnapshot snapshot) {
+      var todo = new Todo.fromJson(snapshot.key, snapshot.value);
+      completer.complete(todo);
+    });
+
+    return completer.future;
+  }
+}
+
+
+
+
+
+
+class Preferences {
+  static const String ARTICLE_KEY = "articleKey";
+
+  static Future<bool> setAccountKey(String accountKey) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(ARTICLE_KEY, accountKey);
+    return prefs.commit();
+  }
+
+  static Future<String> getAccountKey() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String articleKey = prefs.getString(ARTICLE_KEY);
+
+    // workaround - simulate a login setting this
+    if (articleKey == null) {
+      articleKey = "-KriFiUADpl-X07hnBC-";
+    }
+
+    return articleKey;
+  }
+}

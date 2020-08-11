@@ -1,7 +1,6 @@
 import 'package:adolescentfinalyearproject/chat/chartLanding.dart';
 import 'package:adolescentfinalyearproject/common/popUpButton.dart';
 import 'package:adolescentfinalyearproject/container/homeItemList.dart';
-import 'package:adolescentfinalyearproject/container/homeView.dart';
 import 'package:adolescentfinalyearproject/screens/mapPinPointDirectives.dart';
 import 'package:adolescentfinalyearproject/screens/menuDrawer.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +52,7 @@ class _LandingPageState extends State<LandingPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        title: Text("ACP"),
+        title: Text("Adolescent counseling"),
         actions: [
           Container(
             alignment: Alignment.center,
