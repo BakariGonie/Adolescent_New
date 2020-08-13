@@ -1,4 +1,5 @@
 import 'package:adolescentfinalyearproject/screens/landingPage.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:adolescentfinalyearproject/signin/SignUp/ChildViews/signupform.dart';
 import 'package:adolescentfinalyearproject/signin/SignUp/ChildViews/signupimages.dart';
@@ -8,6 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
+
+import '../../globals.dart';
 
 class SignUpMain extends StatefulWidget {
   final FirebaseUser firebaseUser;
@@ -26,6 +29,7 @@ class _SignUpWithMail extends State<SignUpMain> {
   final _introduceTextController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _mobileController = TextEditingController();
+
 
   // pageController in view.
   final PageController _pageController = PageController();
@@ -447,10 +451,7 @@ class _SignUpWithMail extends State<SignUpMain> {
         final List<DocumentSnapshot> documents = result.documents;
         if (documents.length == 0) {
           // Update data to server if new user
-          Firestore.instance
-              .collection('users')
-              .document(firebaseUser.uid)
-              .setData({
+          Map<String, dynamic> data = {
             'email': _emailTextController.text,
             'name': _nameTextController.text,
             'phoneNumber': _mobileController.text,
@@ -466,8 +467,11 @@ class _SignUpWithMail extends State<SignUpMain> {
             'intro': _introduceTextController.text,
             'id': firebaseUser.uid,
             'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
-            'chattingWith': null
-          });
+            'chattingWith': null,
+            'role': 'adolescent'
+          };
+
+          userRef.push().set(data);
 
           // Write data to local
           currentUser = firebaseUser;

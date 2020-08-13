@@ -11,13 +11,31 @@ import 'package:adolescentfinalyearproject/signin/LoginScreen/signin.dart';
 import 'package:adolescentfinalyearproject/signin/LoginScreen/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:adolescentfinalyearproject/signin/HomeMain/userscreen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+import 'globals.dart';
+
+
+Future<FirebaseApp> initialize() async {
+  return await FirebaseApp.configure(
+    name: 'fyp-web-app',
+    options: FirebaseOptions(
+      googleAppID: '1:355486033955:android:e18f75dff91ab5845b2996',
+      apiKey: 'AIzaSyDAP1FxWErwnbGCjwTQomELNY-my_e7Csk',
+      databaseURL: 'https://fyp-web-app.firebaseio.com',
+    )
+  );
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({});
+   app = await initialize();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

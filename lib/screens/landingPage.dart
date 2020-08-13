@@ -1,4 +1,7 @@
 import 'package:adolescentfinalyearproject/chat/chartLanding.dart';
+import 'package:adolescentfinalyearproject/chat/chatModel.dart';
+import 'package:adolescentfinalyearproject/chat/chatUserList.dart';
+import 'package:adolescentfinalyearproject/chat/usersList.dart';
 import 'package:adolescentfinalyearproject/common/popUpButton.dart';
 import 'package:adolescentfinalyearproject/container/homeItemList.dart';
 import 'package:adolescentfinalyearproject/screens/mapPinPointDirectives.dart';
@@ -93,7 +96,7 @@ class _LandingPageState extends State<LandingPage> {
         backgroundColor: Theme.of(context).primaryColor,
         child: Icon(Icons.message),
         onPressed: (){
-
+          Navigator.push(context, MaterialPageRoute(builder: (_)=> UserList()));
         },
       ):null,
       bottomNavigationBar: Theme(

@@ -23,6 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  firebase_core: ^0.4.5
   email_validator: ^1.0.0
   nominatim_location_picker: ^0.1.0+7
   time_formatter: ^1.0.0
