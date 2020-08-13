@@ -23,10 +23,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_map: ^0.9.0
   email_validator: ^1.0.0
+  nominatim_location_picker: ^0.1.0+7
   time_formatter: ^1.0.0
-  flutter_map_marker_cluster: ^0.2.8
   image_picker: ^0.6.3+4
   image_cropper: ^1.2.1
   shared_preferences: ^0.5.6+3
@@ -43,6 +42,8 @@ dependencies:
   flutter_widgets: ^0.1.7+1
   flutter_screenutil: ^2.3.1
   firebase_database: ^3.1.6
+  cached_network_image: ^2.2.0+1
+  readmore: ^1.0.0
 
   #  flutter_chat: ^0.1.5
 
