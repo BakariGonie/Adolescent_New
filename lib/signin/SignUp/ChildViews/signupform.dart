@@ -78,7 +78,7 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     icon:Icon(Icons.account_circle),
-                    labelText: 'firstName',
+                    labelText: 'First Name',
                     hintText: 'Type Name'
                 ),
                 validator: (String value) {
@@ -97,7 +97,7 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     icon:Icon(Icons.account_circle),
-                    labelText: 'lastName',
+                    labelText: 'Last Name',
                     hintText: 'Type Name'
                 ),
                 validator: (String value) {

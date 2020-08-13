@@ -462,8 +462,8 @@ class _SignUpWithMail extends State<SignUpMain> {
           // Update data to server if new user
           Map<String, dynamic> data = {
             'email': _emailTextController.text,
-            'First Name': _firstnameTextController.text,
-            'Last Name': _lastnameTextController.text,
+            'firstName': _firstnameTextController.text,
+            'lastName': _lastnameTextController.text,
             'phoneNumber': _mobileController.text,
             'gender': _userDataMap['gender'],
             'age': _userDataMap['age'],
@@ -487,15 +487,12 @@ class _SignUpWithMail extends State<SignUpMain> {
           currentUser = firebaseUser;
           await prefs.setString('id', currentUser.uid);
           await prefs.setString('email', _emailTextController.text);
-          await prefs.setString('firstname', _firstnameTextController.text);
-          await prefs.setString('lastname', _lastnameTextController.text);
+          await prefs.setString('firstName', _firstnameTextController.text);
+          await prefs.setString('lastName', _lastnameTextController.text);
           await prefs.setString('phone number', _mobileController.text);
           await prefs.setString('gender', _userDataMap['gender']);
           await prefs.setInt('age', _userDataMap['age']);
           await prefs.setString('image0', _imageStringList[0]);
-          await prefs.setString('image1', _imageStringList[1]);
-          await prefs.setString('image2', _imageStringList[2]);
-          await prefs.setString('image3', _imageStringList[3]);
           await prefs.setInt('birth_year', _userDataMap['birth_year']);
           await prefs.setInt('birth_month', _userDataMap['birth_month']);
           await prefs.setInt('birth_day', _userDataMap['birth_day']);
