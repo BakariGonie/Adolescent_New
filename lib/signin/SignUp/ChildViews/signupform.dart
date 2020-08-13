@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class SignUpForm extends StatefulWidget {
   SignUpForm({this.emailTextController,
       this.passwordTextController,
-      this.nameTextController,
+      this.firstnameTextController,
+      this.lastnameTextController,
       this.mobileTextController,
       this.confirmPasswordTextController,
       this.parentAction,
@@ -11,7 +12,8 @@ class SignUpForm extends StatefulWidget {
 
   final TextEditingController emailTextController;
   final TextEditingController passwordTextController;
-  final TextEditingController nameTextController;
+  final TextEditingController firstnameTextController;
+  final TextEditingController lastnameTextController;
   final TextEditingController mobileTextController;
   final TextEditingController confirmPasswordTextController;
 
@@ -76,7 +78,7 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     icon:Icon(Icons.account_circle),
-                    labelText: 'Name',
+                    labelText: 'First Name',
                     hintText: 'Type Name'
                 ),
                 validator: (String value) {
@@ -86,7 +88,26 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
                     return null;
                   }
                 },
-                controller: widget.nameTextController,
+                controller: widget.firstnameTextController,
+              ),
+            ),
+            SizedBox(
+              width: 360,
+              child: TextFormField(
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    icon:Icon(Icons.account_circle),
+                    labelText: 'Last Name',
+                    hintText: 'Type Name'
+                ),
+                validator: (String value) {
+                  if (value.trim().isEmpty) {
+                    return 'Name is required';
+                  }else {
+                    return null;
+                  }
+                },
+                controller: widget.lastnameTextController,
               ),
             ),
             Divider(),
@@ -176,6 +197,7 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
                   labelText: 'Phone',
                   hintText: 'Type phone number',
                 ),
+                keyboardType: TextInputType.phone,
                 validator: (String value) {
                   String pattern = r'(^[0-9]*$)';
                   RegExp regExp = new RegExp(pattern);
@@ -202,6 +224,7 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
                     labelText: 'Email',
                     hintText: 'Type your email'
                 ),
+                keyboardType: TextInputType.emailAddress,
                 validator: (String value) {
                  String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\'
                      r'.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -262,7 +285,7 @@ class _SignUpForm extends State<SignUpForm> with AutomaticKeepAliveClientMixin<S
                 decoration: InputDecoration(
                     border: InputBorder.none,
                     icon:Icon(Icons.lock, color: !widget.isWithSNS ? Colors.grey : Colors.grey[300],),
-                    labelText: !widget.isWithSNS ? 'confirmPassword' : 'Do not need a confirmPassword',
+                    labelText: !widget.isWithSNS ? 'Confirm Password' : 'Do not need a confirmPassword',
                     hintText: 'Type confirmPassword'
                 ),
                 style: TextStyle(color: !widget.isWithSNS ? Colors.black : Colors.grey[300]),

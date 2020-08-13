@@ -1,11 +1,14 @@
 import 'package:adolescentfinalyearproject/screens/landingPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:adolescentfinalyearproject/signin/SignUp/signupmain.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../globals.dart';
 
 class SignUp extends StatefulWidget {
   SignUp(this.parentAction);
@@ -169,22 +172,25 @@ class _SignUp extends State<SignUp> {
           );
         } else {
           // Write data to local
-          await prefs.setString('id', documents[0]['id']);
-          await prefs.setString('email', documents[0]['email']);
-          await prefs.setString('name', documents[0]['name']);
-          await prefs.setString('phone number', documents[0]['phone number']);
-          await prefs.setString('gender', documents[0]['gender']);
-          await prefs.setInt('age', documents[0]['age']);
-          await prefs.setString('blood', documents[0]['blood']);
-          await prefs.setString('image0', documents[0]['image0']);
-          await prefs.setString('image1', documents[0]['image1']);
-          await prefs.setString('image2', documents[0]['image2']);
-          await prefs.setString('image3', documents[0]['image3']);
-          await prefs.setInt('birth_year', documents[0]['birth_year']);
-          await prefs.setInt('birth_month', documents[0]['birth_month']);
-          await prefs.setInt('birth_day', documents[0]['birth_day']);
-          await prefs.setString('intro', documents[0]['intro']);
-          await prefs.setString('createdAt', documents[0]['createdAt']);
+          DataSnapshot userData = await userRef.equalTo(firebaseUser.uid, key: 'id').once();
+          Map<dynamic, dynamic> data = userData.value;
+          await prefs.setString('id', data['id']);
+          await prefs.setString('email', data['email']);
+          await prefs.setString('firstname', data['firstname']);
+          await prefs.setString('lastname', data['lastname']);
+          await prefs.setString('phone number', data['phone number']);
+          await prefs.setString('gender', data['gender']);
+          await prefs.setInt('age', data['age']);
+          await prefs.setString('blood', data['blood']);
+          await prefs.setString('image0', data['image0']);
+          await prefs.setString('image1', data['image1']);
+          await prefs.setString('image2', data['image2']);
+          await prefs.setString('image3', data['image3']);
+          await prefs.setInt('birth_year', data['birth_year']);
+          await prefs.setInt('birth_month', data['birth_month']);
+          await prefs.setInt('birth_day', data['birth_day']);
+          await prefs.setString('intro', data['intro']);
+          await prefs.setString('createdAt', data['createdAt']);
           await prefs.setBool('isLogin', true);
 
           Navigator.push(

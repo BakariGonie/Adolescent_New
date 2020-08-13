@@ -18,7 +18,7 @@ class _UserScreen extends State<UserScreen> with WidgetsBindingObserver{
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       setState(() {
-        _useData['name'] = prefs.get('name');
+        _useData['firstname'] = prefs.get('firstname');
         _useData['gender'] = prefs.get('gender');
         _useData['intro'] = prefs.get('intro');
         _useData['email'] = prefs.get('email');
@@ -72,7 +72,7 @@ class _UserScreen extends State<UserScreen> with WidgetsBindingObserver{
                   padding: const EdgeInsets.only(bottom: 8),
                   child:
                   Text(
-                    _useData['name'],
+                    _useData['firstname'],
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -91,7 +91,7 @@ class _UserScreen extends State<UserScreen> with WidgetsBindingObserver{
             padding: const EdgeInsets.all(8.0),
             child: Icon(
               Icons.account_circle,
-              color: _useData['gender'] == 'Man' ? Colors.blue[700] : Colors.red[700],
+              color: _useData['gender'] == 'Male' ? Colors.blue[700] : Colors.red[700],
               size: 28,
             ),
           ),

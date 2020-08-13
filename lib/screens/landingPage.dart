@@ -157,6 +157,7 @@ class _LandingPageState extends State<LandingPage> {
           onTap: navigationTapped,
           currentIndex: _pageIndex,
         ),
+
       ),
     );
   }

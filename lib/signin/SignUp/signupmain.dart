@@ -25,7 +25,8 @@ class _SignUpWithMail extends State<SignUpMain> {
   // Get user data. these controllers connected with childView ( signupform.dart )
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
-  final _nameTextController = TextEditingController();
+  final _firstnameTextController = TextEditingController();
+  final _lastnameTextController = TextEditingController();
   final _introduceTextController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _mobileController = TextEditingController();
@@ -65,7 +66,7 @@ class _SignUpWithMail extends State<SignUpMain> {
   @override
   void initState() {
     // init values
-    _userDataMap['gender'] = 'Man';
+    _userDataMap['gender'] = 'Male';
     _userDataMap['term'] = false;
     _userDataMap['age'] = 0;
     _userDataMap['birth_year'] = 0;
@@ -76,7 +77,8 @@ class _SignUpWithMail extends State<SignUpMain> {
         isWithSNS = true;
         currentUser = widget.firebaseUser;
         _emailTextController.text = currentUser.email;
-        _nameTextController.text = currentUser.displayName;
+        _firstnameTextController.text = currentUser.displayName;
+        _lastnameTextController.text = currentUser.displayName;
         _mobileController.text = currentUser.phoneNumber;
       }
     });
@@ -150,7 +152,8 @@ class _SignUpWithMail extends State<SignUpMain> {
                                   SignUpForm(
                                     // pass controllers to get texts
                                     emailTextController: _emailTextController,
-                                    nameTextController: _nameTextController,
+                                    firstnameTextController: _firstnameTextController,
+                                    lastnameTextController: _lastnameTextController,
                                     confirmPasswordTextController:
                                         _confirmPasswordController,
                                     mobileTextController: _mobileController,
@@ -301,11 +304,17 @@ class _SignUpWithMail extends State<SignUpMain> {
         if (alertString.trim() != '') {
           alertString = alertString + '\n\n';
         }
-        alertString = alertString + 'confirmPassword is required';
+        alertString = alertString + 'Confirm Password is required';
       }
     }
 
-    if (_nameTextController.text.trim() == '') {
+    if (_firstnameTextController.text.trim() == '') {
+      if (alertString.trim() != '') {
+        alertString = alertString + '\n\n';
+      }
+      alertString = alertString + 'Please type your name';
+    }
+    if (_lastnameTextController.text.trim() == '') {
       if (alertString.trim() != '') {
         alertString = alertString + '\n\n';
       }
@@ -453,7 +462,8 @@ class _SignUpWithMail extends State<SignUpMain> {
           // Update data to server if new user
           Map<String, dynamic> data = {
             'email': _emailTextController.text,
-            'name': _nameTextController.text,
+            'First Name': _firstnameTextController.text,
+            'Last Name': _lastnameTextController.text,
             'phoneNumber': _mobileController.text,
             'gender': _userDataMap['gender'],
             'age': _userDataMap['age'],
@@ -477,7 +487,8 @@ class _SignUpWithMail extends State<SignUpMain> {
           currentUser = firebaseUser;
           await prefs.setString('id', currentUser.uid);
           await prefs.setString('email', _emailTextController.text);
-          await prefs.setString('name', _nameTextController.text);
+          await prefs.setString('firstname', _firstnameTextController.text);
+          await prefs.setString('lastname', _lastnameTextController.text);
           await prefs.setString('phone number', _mobileController.text);
           await prefs.setString('gender', _userDataMap['gender']);
           await prefs.setInt('age', _userDataMap['age']);
@@ -493,21 +504,24 @@ class _SignUpWithMail extends State<SignUpMain> {
               'createdAt', DateTime.now().millisecondsSinceEpoch.toString());
         } else {
           // Write Firebase data to local
-          await prefs.setString('id', documents[0]['id']);
-          await prefs.setString('email', documents[0]['email']);
-          await prefs.setString('name', documents[0]['name']);
-          await prefs.setString('phone number', documents[0]['phone number']);
-          await prefs.setString('gender', documents[0]['gender']);
-          await prefs.setInt('age', documents[0]['age']);
-          await prefs.setString('image0', documents[0]['image0']);
-          await prefs.setString('image1', documents[0]['image1']);
-          await prefs.setString('image2', documents[0]['image2']);
-          await prefs.setString('image3', documents[0]['image3']);
-          await prefs.setInt('birth_year', documents[0]['birth_year']);
-          await prefs.setInt('birth_month', documents[0]['birth_month']);
-          await prefs.setInt('birth_day', documents[0]['birth_day']);
-          await prefs.setString('intro', documents[0]['intro']);
-          await prefs.setString('createdAt', documents[0]['createdAt']);
+          DataSnapshot userData = await userRef.equalTo(firebaseUser.uid, key: 'id').once();
+          Map<dynamic, dynamic> data = userData.value;
+          await prefs.setString('id', data['id']);
+          await prefs.setString('email', data['email']);
+          await prefs.setString('firstname', data['firstname']);
+          await prefs.setString('lastname', data['lastname']);
+          await prefs.setString('phone number', data['phone number']);
+          await prefs.setString('gender', data['gender']);
+          await prefs.setInt('age', data['age']);
+          await prefs.setString('image0', data['image0']);
+          await prefs.setString('image1', data['image1']);
+          await prefs.setString('image2', data['image2']);
+          await prefs.setString('image3', data['image3']);
+          await prefs.setInt('birth_year', data['birth_year']);
+          await prefs.setInt('birth_month', data['birth_month']);
+          await prefs.setInt('birth_day', data['birth_day']);
+          await prefs.setString('intro', data['intro']);
+          await prefs.setString('createdAt', data['createdAt']);
         }
         setState(() {
           isLoading = false;
