@@ -486,9 +486,6 @@ class _SignUpWithMail extends State<SignUpMain> {
           await prefs.setString('gender', _userDataMap['gender']);
           await prefs.setInt('age', _userDataMap['age']);
           await prefs.setString('image0', _imageStringList[0]);
-          await prefs.setString('image1', _imageStringList[1]);
-          await prefs.setString('image2', _imageStringList[2]);
-          await prefs.setString('image3', _imageStringList[3]);
           await prefs.setInt('birth_year', _userDataMap['birth_year']);
           await prefs.setInt('birth_month', _userDataMap['birth_month']);
           await prefs.setInt('birth_day', _userDataMap['birth_day']);
