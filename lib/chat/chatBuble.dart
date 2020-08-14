@@ -1,9 +1,11 @@
 import 'package:adolescentfinalyearproject/chat/chartDetailsPage.dart';
 import 'package:flutter/material.dart';
 
-class ChatBuble extends StatefulWidget{
+class ChatBuble extends StatefulWidget {
   ChatMessage chatMessage;
+
   ChatBuble({@required this.chatMessage});
+
   @override
   _ChatBubleState createState() => _ChatBubleState();
 }
@@ -11,14 +13,19 @@ class ChatBuble extends StatefulWidget{
 class _ChatBubleState extends State<ChatBuble> {
   @override
   Widget build(BuildContext context) {
+    print(widget.chatMessage.type);
     return Container(
-      padding: EdgeInsets.only(left: 16,right: 16,top: 10,bottom: 10),
+      padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
       child: Align(
-        alignment: (widget.chatMessage.type == MessageType.Receiver?Alignment.topLeft:Alignment.topRight),
+        alignment: (widget.chatMessage.type == MessageType.Receiver
+            ? Alignment.topLeft
+            : Alignment.bottomRight),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
-            color: (widget.chatMessage.type  == MessageType.Receiver?Colors.white:Colors.grey.shade200),
+            color: (widget.chatMessage.type == MessageType.Receiver
+                ? Colors.white
+                : Colors.grey.shade200),
           ),
           padding: EdgeInsets.all(16),
           child: Text(widget.chatMessage.message),

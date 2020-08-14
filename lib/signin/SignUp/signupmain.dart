@@ -152,8 +152,8 @@ class _SignUpWithMail extends State<SignUpMain> {
                                   SignUpForm(
                                     // pass controllers to get texts
                                     emailTextController: _emailTextController,
-                                    firstnameTextController: _firstnameTextController,
-                                    lastnameTextController: _lastnameTextController,
+                                    firstNameTextController: _firstnameTextController,
+                                    lastNameTextController: _lastnameTextController,
                                     confirmPasswordTextController:
                                         _confirmPasswordController,
                                     mobileTextController: _mobileController,
@@ -327,7 +327,7 @@ class _SignUpWithMail extends State<SignUpMain> {
       alertString = alertString + 'phone number is required';
     }
 
-    if (_userDataMap['birth_year'] == 0) {
+    if (_userDataMap['dateOfBirth'] == null) {
       if (alertString.trim() != '') {
         alertString = alertString + '\n\n';
       }
@@ -462,33 +462,26 @@ class _SignUpWithMail extends State<SignUpMain> {
           // Update data to server if new user
           Map<String, dynamic> data = {
             'email': _emailTextController.text,
-            'First Name': _firstnameTextController.text,
-            'Last Name': _lastnameTextController.text,
+            'firstName': _firstnameTextController.text,
+            'lastName': _lastnameTextController.text,
             'phoneNumber': _mobileController.text,
             'gender': _userDataMap['gender'],
-            'age': _userDataMap['age'],
             'image0': _imageStringList[0],
-            'image1': _imageStringList[1],
-            'image2': _imageStringList[2],
-            'image3': _imageStringList[3],
-            'birth_year': _userDataMap['birth_year'],
-            'birth_month': _userDataMap['birth_month'],
-            'birth_day': _userDataMap['birth_day'],
             'intro': _introduceTextController.text,
             'id': firebaseUser.uid,
-            'createdAt': DateTime.now().millisecondsSinceEpoch.toString(),
-            'chattingWith': null,
+            'createdAt': DateTime.now().millisecondsSinceEpoch,
+            'dateOfBirth': _userDataMap['dateOfBirth'].millisecondsSinceEpoch,
             'role': 'adolescent'
           };
 
           userRef.push().set(data);
-
+          user = data;
           // Write data to local
           currentUser = firebaseUser;
           await prefs.setString('id', currentUser.uid);
           await prefs.setString('email', _emailTextController.text);
-          await prefs.setString('firstname', _firstnameTextController.text);
-          await prefs.setString('lastname', _lastnameTextController.text);
+          await prefs.setString('firstName', _firstnameTextController.text);
+          await prefs.setString('lastName', _lastnameTextController.text);
           await prefs.setString('phone number', _mobileController.text);
           await prefs.setString('gender', _userDataMap['gender']);
           await prefs.setInt('age', _userDataMap['age']);

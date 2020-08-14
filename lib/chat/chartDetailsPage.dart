@@ -9,39 +9,32 @@ enum MessageType {
 }
 
 class ChatDetailsPage extends StatefulWidget {
-  final ChatUser user;
+  final Chat chat;
 
-  ChatDetailsPage({@required this.user});
+  ChatDetailsPage({@required this.chat});
 
   @override
   _ChatDetailsPageState createState() => _ChatDetailsPageState();
 }
 
-class ChatMessage{
+class ChatMessage {
   String message;
   MessageType type;
-  ChatMessage({@required this.message,@required this.type});
+  DateTime timeStamp;
+
+  ChatMessage({@required this.message, @required this.type, this.timeStamp});
 }
 
-class SendMenuItems{
+class SendMenuItems {
   String text;
   IconData icons;
   MaterialColor color;
-  SendMenuItems({@required this.text,@required this.icons,@required this.color});
+
+  SendMenuItems(
+      {@required this.text, @required this.icons, @required this.color});
 }
 
 class _ChatDetailsPageState extends State<ChatDetailsPage> {
-  List<ChatMessage> chatMessage = [
-    ChatMessage(message: "Hi John", type: MessageType.Receiver),
-    ChatMessage(message: "Hope you are doin good", type: MessageType.Receiver),
-    ChatMessage(
-        message: "Hello Jane, I'm good what about you",
-        type: MessageType.Sender),
-    ChatMessage(
-        message: "I'm fine, Working from home", type: MessageType.Receiver),
-    ChatMessage(message: "Oh! Nice. Same here man", type: MessageType.Sender),
-  ];
-
   List<SendMenuItems> menuItems = [
     SendMenuItems(
         text: "Photos & Videos", icons: Icons.image, color: Colors.amber),
@@ -119,25 +112,40 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    ChatUser user = widget.user;
+    var chat = widget.chat;
     return Scaffold(
       appBar: ChatDetailPageAppBar(
-        user: user,
+        user: chat.profile2,
       ),
       body: Stack(
         children: <Widget>[
-          ListView.builder(
-            itemCount: chatMessage.length,
-            shrinkWrap: true,
-            padding: EdgeInsets.only(top: 10, bottom: 10),
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return ChatBuble(
-                chatMessage: chatMessage[index],
-              );
-            },
-          ),
-
+          StreamBuilder(
+              stream: chat.getChatStream(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<ChatMessage> chatMessage =
+                      chat.getMessagesFromSnapshot(snapshot.data.snapshot);
+                  return ListView.builder(
+                    itemCount: chatMessage.length,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    physics: BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return ChatBuble(
+                        chatMessage: chatMessage[index],
+                      );
+                    },
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(snapshot.error.toString()),
+                  );
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }),
           Align(
             alignment: Alignment.bottomLeft,
             child: Container(
@@ -187,14 +195,9 @@ class _ChatDetailsPageState extends State<ChatDetailsPage> {
               padding: EdgeInsets.only(right: 30, bottom: 50),
               child: FloatingActionButton(
                 onPressed: () {
-                  print("AAS");
                   String message = _senderTextMessage.text.trim();
-
-
-                  chatMessage.add(ChatMessage(message: message, type: MessageType.Sender));
-
-                  print(chatMessage[chatMessage.length-1].message);
-
+                  _senderTextMessage.clear();
+                  chat.sendMessage(message);
                 },
                 child: Icon(
                   Icons.send,

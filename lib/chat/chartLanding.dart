@@ -1,6 +1,9 @@
 import 'package:adolescentfinalyearproject/chat/chatModel.dart';
 import 'package:adolescentfinalyearproject/chat/chatUserList.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+
+import '../globals.dart';
 
 class ChatLanding extends StatefulWidget {
   @override
@@ -8,65 +11,39 @@ class ChatLanding extends StatefulWidget {
 }
 
 class _ChatLandingState extends State<ChatLanding> {
+  List<Chat> chats;
 
-  List<ChatUser> chatUsers = [
-    ChatUser(
-        name: "Jane Russel",
-        isOnline: true,
-        isLastMessageRead: true,
-        lastText: "Awesome Setup",
-        image: "assets/customer-avatar.png",
-        lastTextTime: DateTime.now()),
-    ChatUser(
-        name: "Glady's Murphy",
-        lastText: "That's Great",
-        isOnline: true,
-        isLastMessageRead: true,
-        image: "assets/customer-avatar.png",
-        lastTextTime: DateTime.now()),
-    ChatUser(
-        name: "Jorge Henry",
-        lastText: "Hey where are you?",
-        isOnline: true,
-        isLastMessageRead: true,
-        image: "assets/customer-avatar.png",
-        lastTextTime: DateTime.now()),
-    ChatUser(
-        name: "Philip Fox",
-        lastText: "Busy! Call me in 20 mins",
-        image: "assets/customer-avatar.png",
-        isOnline: true,
-        isLastMessageRead: false,
-        lastTextTime: DateTime.now()),
-    ChatUser(
-        name: "Debra Hawkins",
-        lastText: "Thankyou, It's awesome",
-        image: "assets/customer-avatar.png",
-        isOnline: true,
-        isLastMessageRead: false,
-        lastTextTime: DateTime.now()),
-    ChatUser(
-        name: "Jacob Pena",
-        lastText: "will update you in evening",
-        image: "assets/customer-avatar.png",
-        isOnline: true,
-        isLastMessageRead: true,
-        lastTextTime: DateTime.now()),
-    ChatUser(
-        name: "Andrey Jones",
-        lastText: "Can you please share the file?",
-        image: "assets/customer-avatar.png",
-        isOnline: true,
-        isLastMessageRead: true,
-        lastTextTime: DateTime.now()),
-    ChatUser(
-        name: "John Wick",
-        lastText: "How are you?",
-        image: "assets/customer-avatar.png",
-        isOnline: true,
-        isLastMessageRead: false,
-        lastTextTime: DateTime.now()),
-  ];
+  Future<void> loadChat(Chat chat) async {
+    await chat.getChat();
+    setState(() {
+      chats.add(chat);
+    });
+  }
+
+  Future<void> getChatUsers() async {
+    chats = [];
+    DatabaseReference messageRef = database.reference().child('messages');
+    DataSnapshot snapshot = await messageRef.once();
+
+    List<Future<dynamic>> futures = [];
+    snapshot.value.forEach((key, value) {
+
+      if (key.contains(user['id'])) {
+
+        Chat n = new Chat(
+            key: key);
+        futures.add(loadChat(n));
+      }
+    });
+
+    await Future.wait(futures);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getChatUsers().then((value) => print(chats[0].messages));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,25 +57,35 @@ class _ChatLandingState extends State<ChatLanding> {
               padding: EdgeInsets.only(left: 16, right: 16, top: 10),
               child: Text(
                 "Chats",
-                style:
-                TextStyle(fontSize: 30, fontWeight: FontWeight.bold,),
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
-          ListView.builder(
-            itemCount: chatUsers.length,
-            shrinkWrap: true,
-            padding: EdgeInsets.only(top: 16),
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return ChatUsersList(
-                user: chatUsers[index],
-              );
-            },
-          ),
+          chats == null
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : chats.isEmpty
+                  ? Center(
+                      child:
+                          Text('Click on the Message icon to start chatting'),
+                    )
+                  : ListView.builder(
+                      itemCount: chats.length,
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(top: 16),
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return ChatUsersList(
+                          chat: chats[index],
+                        );
+                      },
+                    ),
         ],
       ),
-
     );
   }
 }

@@ -5,35 +5,25 @@ import 'package:adolescentfinalyearproject/signin/LoginScreen/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../globals.dart';
+
 class UserScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _UserScreen();
 }
 
-class _UserScreen extends State<UserScreen> with WidgetsBindingObserver{
-  Map<String, dynamic> _useData = Map<String, dynamic>();
-  bool _fetchingData = true;
+class _UserScreen extends State<UserScreen> with WidgetsBindingObserver {
+  Map<dynamic, dynamic> _useData = Map<dynamic, dynamic>();
+  bool _fetchingData = false;
 
   Future<void> _getUserData() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       setState(() {
-        _useData['firstname'] = prefs.get('firstname');
-        _useData['gender'] = prefs.get('gender');
-        _useData['intro'] = prefs.get('intro');
-        _useData['email'] = prefs.get('email');
-        _useData['birth_year'] = prefs.get('birth_year');
-        _useData['birth_month'] = prefs.get('birth_month');
-        _useData['birth_day'] = prefs.get('birth_day');
-        _useData['image0'] = prefs.get('image0');
-        _useData['image1'] = prefs.get('image1');
-        _useData['image2'] = prefs.get('image2');
-        _useData['image3'] = prefs.get('image3');
-        _useData['age'] = calculateAge(prefs.get('birth_year'), prefs.get('birth_month'), prefs.get('birth_day'));
+        _useData = user;
         _fetchingData = false;
       });
-    }catch(e) {
-    }
+    } catch (e) {}
   }
 
   calculateAge(int year, int month, int day) {
@@ -70,9 +60,8 @@ class _UserScreen extends State<UserScreen> with WidgetsBindingObserver{
               children: [
                 Container(
                   padding: const EdgeInsets.only(bottom: 8),
-                  child:
-                  Text(
-                    _useData['firstname'],
+                  child: Text(
+                    '${_useData['firstName']} ${_useData['lastName']}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -91,11 +80,13 @@ class _UserScreen extends State<UserScreen> with WidgetsBindingObserver{
             padding: const EdgeInsets.all(8.0),
             child: Icon(
               Icons.account_circle,
-              color: _useData['gender'] == 'Male' ? Colors.blue[700] : Colors.red[700],
+              color: _useData['gender'] == 'Male'
+                  ? Colors.blue[700]
+                  : Colors.red[700],
               size: 28,
             ),
           ),
-          Text(_useData['age'].toString()),
+          Text(getUserAge().toString()),
         ],
       ),
     );
@@ -103,7 +94,7 @@ class _UserScreen extends State<UserScreen> with WidgetsBindingObserver{
 
   Widget textSection() {
     return Container(
-      padding: const EdgeInsets.only(left:32, right: 32),
+      padding: const EdgeInsets.only(left: 32, right: 32),
       child: Text(
         _useData['intro'],
         softWrap: true,
@@ -140,23 +131,31 @@ class _UserScreen extends State<UserScreen> with WidgetsBindingObserver{
           ),
           //automaticallyImplyLeading: false,
         ),
-        body:
-        _fetchingData ? CircularProgressIndicator() :
-        ListView(
-          children: [
-            _useData['image0'] == '' ?
-            Container(
-              height: 240,
-              child: Icon(Icons.broken_image, size: 160,color: Colors.grey,),
-            ) :
-            Image.network(_useData['image0'],
-              height: 240,
-              fit: BoxFit.cover,),
-            titleSection(),
-            textSection(),
-            _deleteUser()
-          ],
-        ),
+        body: _fetchingData
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : ListView(
+                children: [
+                  _useData['image0'] == ''
+                      ? Container(
+                          height: 240,
+                          child: Icon(
+                            Icons.broken_image,
+                            size: 160,
+                            color: Colors.grey,
+                          ),
+                        )
+                      : Image.network(
+                          _useData['image0'],
+                          height: 240,
+                          fit: BoxFit.cover,
+                        ),
+                  titleSection(),
+                  textSection(),
+                  _deleteUser()
+                ],
+              ),
       ),
     );
   }

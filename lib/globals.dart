@@ -4,6 +4,13 @@ import 'package:firebase_database/firebase_database.dart';
 
 FirebaseApp app;
 
+Map<dynamic, dynamic> user;
+
+int getUserAge(){
+    DateTime doB = new DateTime.fromMillisecondsSinceEpoch(user['dateOfBirth']);
+    return DateTime.now().year - doB.year;
+}
+
 final FirebaseDatabase database = FirebaseDatabase(app: app);
 final DatabaseReference userRef =  database.reference().child('users');
 

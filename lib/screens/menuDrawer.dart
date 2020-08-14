@@ -2,6 +2,8 @@ import 'package:adolescentfinalyearproject/container/homeItemList.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../globals.dart';
+
 class DrawerItem {
   String title;
   IconData icon;
@@ -14,7 +16,10 @@ class MenuDrawer extends StatefulWidget {
   _MenuDrawerState createState() => new _MenuDrawerState();
 }
 
+
 class _MenuDrawerState extends State<MenuDrawer> {
+
+
   final drawerItems = [
     DrawerItem("Homepage", Icons.pageview),
     DrawerItem("Special_centres", Icons.directions),
@@ -23,15 +28,16 @@ class _MenuDrawerState extends State<MenuDrawer> {
     DrawerItem("contacts", Icons.phone),
     DrawerItem("schedule", Icons.access_time),
   ];
-  Map<String, dynamic> _useData = Map<String, dynamic>();
+
+
+  Map<dynamic, dynamic> _useData = Map<dynamic, dynamic>();
   bool _fetchingData = true;
   Future<void> _getUserData() async {
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
       setState(() {
-        _useData['name'] = prefs.get('name');
-        _useData['email'] = prefs.get('email');
+       _useData = user;
         _fetchingData = false;
+        print(_useData);
       });
     }catch(e) {
     }
@@ -75,14 +81,13 @@ class _MenuDrawerState extends State<MenuDrawer> {
             ],
           )
 
-
       );
     }
     return Drawer(
       child: new ListView(
         children: <Widget>[
           new UserAccountsDrawerHeader(
-            accountName: new Text(_useData['name']),
+            accountName: new Text('${_useData['firstName']} ${_useData['lastName']}'),
             accountEmail: new Text(_useData['email']),
 
             currentAccountPicture: new CircleAvatar(

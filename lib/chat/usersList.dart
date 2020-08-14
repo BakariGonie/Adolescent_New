@@ -1,5 +1,6 @@
+import 'package:adolescentfinalyearproject/chat/chartDetailsPage.dart';
+import 'package:adolescentfinalyearproject/chat/chatModel.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_list.dart';
 import 'package:flutter/material.dart';
 
 import '../globals.dart';
@@ -15,11 +16,11 @@ class _UserListState extends State<UserList> {
   @override
   void initState() {
     userRef.once().then((DataSnapshot data) {
-      data.value.forEach((key, value){
+      users = [];
+      data.value.forEach((key, value) {
         setState(() {
           users.add(value);
         });
-
       });
     });
     super.initState();
@@ -39,9 +40,18 @@ class _UserListState extends State<UserList> {
               ? Center(
                   child: Text('No users'),
                 )
-              : ListView.builder(itemBuilder: (context, index) {
-                  return ListTile(title: Text(users[index]['name']));
-                }),
+              : ListView.builder(
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(users[index]['firstName']),
+                      onTap: () {
+                        final chat = new Chat(key: user['id'] + users[index]['id']);
+                        chat.getChat().then((value) => Navigator.push(context, MaterialPageRoute(builder: (_)=> ChatDetailsPage(chat: chat))));
+                      },
+                    );
+                  },
+                  itemCount: users.length,
+                ),
     );
   }
 }
