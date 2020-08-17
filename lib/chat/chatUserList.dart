@@ -17,8 +17,10 @@ class _ChatUsersListState extends State<ChatUsersList> {
 
   @override
   void initState() {
-    setState(() {
-      chat = widget.chat;
+    widget.chat.getChat().then((_) {
+      setState(() {
+        chat = widget.chat;
+      });
     });
     super.initState();
   }

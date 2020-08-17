@@ -108,17 +108,23 @@ class Chat {
 
   List<ChatMessage> getMessagesFromSnapshot(DataSnapshot snapshot) {
     Map<dynamic, dynamic> chat = snapshot.value;
-    List<dynamic> dbMessages = chat.values.toList();
-    dbMessages.sort((a, b) => a['timestamp'].compareTo(b['timestamp']));
+    if (chat == null) {
+      createChat();
+      return messages;
+    } else {
+      List<dynamic> dbMessages = chat.values.toList();
+      dbMessages.sort((a, b) => a['timestamp'].compareTo(b['timestamp']));
 
-    return dbMessages.map((msg) {
-      return new ChatMessage(
-          message: msg['message'],
-          type: user1 == msg['sender']
-              ? MessageType.Sender
-              : MessageType.Receiver,
-          timeStamp: new DateTime.fromMillisecondsSinceEpoch(msg['timestamp']));
-    }).toList();
+      return dbMessages.map((msg) {
+        return new ChatMessage(
+            message: msg['message'],
+            type: user1 == msg['sender']
+                ? MessageType.Sender
+                : MessageType.Receiver,
+            timeStamp:
+                new DateTime.fromMillisecondsSinceEpoch(msg['timestamp']));
+      }).toList();
+    }
   }
 
   Future<void> sendMessage(String message) async {

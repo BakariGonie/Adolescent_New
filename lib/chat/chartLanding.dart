@@ -11,38 +11,27 @@ class ChatLanding extends StatefulWidget {
 }
 
 class _ChatLandingState extends State<ChatLanding> {
-  List<Chat> chats;
+  DatabaseReference messageRef;
 
-  Future<void> loadChat(Chat chat) async {
-    await chat.getChat();
-    setState(() {
-      chats.add(chat);
-    });
-  }
+  List<Chat> getChatUsers(DataSnapshot snapshot) {
+    List<Chat> chats = [];
 
-  Future<void> getChatUsers() async {
-    chats = [];
-    DatabaseReference messageRef = database.reference().child('messages');
-    DataSnapshot snapshot = await messageRef.once();
-
-    List<Future<dynamic>> futures = [];
     snapshot.value.forEach((key, value) {
-
       if (key.contains(user['id'])) {
-
-        Chat n = new Chat(
-            key: key);
-        futures.add(loadChat(n));
+          Chat n = new Chat(key: key);
+        chats.add(n);
       }
     });
 
-    await Future.wait(futures);
+//    chats.sort((b, a) => a.messages[a.messages.length - 1].timeStamp
+//        .compareTo(b.messages[b.messages.length - 1].timeStamp));
+    return chats;
   }
 
   @override
   void initState() {
+    messageRef = database.reference().child('messages');
     super.initState();
-    getChatUsers().then((value) => print(chats[0].messages));
   }
 
   @override
@@ -64,26 +53,33 @@ class _ChatLandingState extends State<ChatLanding> {
               ),
             ),
           ),
-          chats == null
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : chats.isEmpty
-                  ? Center(
-                      child:
-                          Text('Click on the Message icon to start chatting'),
-                    )
-                  : ListView.builder(
-                      itemCount: chats.length,
-                      shrinkWrap: true,
-                      padding: EdgeInsets.only(top: 16),
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return ChatUsersList(
-                          chat: chats[index],
-                        );
-                      },
-                    ),
+          StreamBuilder(
+              stream: messageRef.onValue,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Chat> chats = getChatUsers(snapshot.data.snapshot);
+                  return ListView.builder(
+                    itemCount: chats.length,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.only(top: 16),
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return ChatUsersList(
+                        chat: chats[index],
+                      );
+                    },
+                  );
+                } else if (snapshot.hasData &&
+                    snapshot.data.snapshot.values.toList().isEmpty) {
+                  return Center(
+                    child: Text('Press on the button below to start chatting'),
+                  );
+                } else {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              })
         ],
       ),
     );
