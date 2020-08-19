@@ -51,8 +51,8 @@ class _SignUpImages extends State<SignUpImages>
                           padding: const EdgeInsets.all(8.0),
                           child: new GestureDetector(
                             onTap: () {
-                              _imagePosition = 0;
-                              _getImage();
+//                              _imagePosition = 0;
+//                              _getImage();
                             },
                             child: Container(
                               width: 150,
@@ -72,8 +72,8 @@ class _SignUpImages extends State<SignUpImages>
                           padding: const EdgeInsets.all(8.0),
                           child: new GestureDetector(
                             onTap: () {
-                              _imagePosition = 1;
-                              _getImage();
+//                              _imagePosition = 1;
+//                              _getImage();
                             },
                             child: Container(
                               width: 160,
@@ -108,8 +108,8 @@ class _SignUpImages extends State<SignUpImages>
                         padding: const EdgeInsets.all(8.0),
                         child: new GestureDetector(
                           onTap: () {
-                            _imagePosition = 2;
-                            _getImage();
+//                            _imagePosition = 2;
+//                            _getImage();
                           },
                           child: Container(
                             width: 150,
@@ -129,8 +129,8 @@ class _SignUpImages extends State<SignUpImages>
                         padding: const EdgeInsets.all(8.0),
                         child: new GestureDetector(
                           onTap: () {
-                            _imagePosition = 3;
-                            _getImage();
+//                            _imagePosition = 3;
+//                            _getImage();
                           },
                           child: Container(
                             width: 160,
@@ -166,11 +166,11 @@ class _SignUpImages extends State<SignUpImages>
     widget.parentAction(addData);
   }
 
-  Future _getImage() async {
-    // Get image from gallery.
-    PickedFile image = await _imagePicker.getImage(source: ImageSource.gallery);
-    _cropImage(File(image.path));
-  }
+//  Future _getImage() async {
+//    // Get image from gallery.
+//    PickedFile image = await _imagePicker.getImage(source: ImageSource.gallery);
+//    _cropImage(File(image.path));
+//  }
 
   Future<Null> _cropImage(File image) async {
     File croppedFile = await ImageCropper.cropImage(

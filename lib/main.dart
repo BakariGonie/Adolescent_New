@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
         routes: <String, WidgetBuilder>{
           '/profile': (context) => UserScreen(),
           '/home': (context) => HomePage(),
-          '/available': (context) => AvailableCounselors(),
+          '/available': (context) => AvailableCounselor(),
           '/contacts': (context) => Contacts(),
           '/about': (context) => AboutScreen(),
           '/special': (context) => SpecialPlaces(),
