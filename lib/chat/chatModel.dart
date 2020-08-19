@@ -70,7 +70,7 @@ class Chat {
     var d = snapshot.value.values.toList()[0];
     print(d);
     profile2 = new ChatUser(
-        name: '${d['firstName']} ${d['lastName']}', isOnline: true, image: "");
+        name: '${d['firstName']} ${d['lastName']}', isOnline: true, image: "assets/customer-avatar.png");
     profile1 = new ChatUser(
         name: '${user['firstName']} ${user['lastName']}',
         isOnline: true,
