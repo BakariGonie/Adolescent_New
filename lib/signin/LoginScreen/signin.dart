@@ -1,6 +1,5 @@
 import 'package:adolescentfinalyearproject/globals.dart';
 import 'package:adolescentfinalyearproject/screens/landingPage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -184,26 +183,27 @@ class _SignIn extends State<SignIn> {
       if (firebaseUser != null) {
         // Check is already sign up
         DataSnapshot userData =
-            await userRef.orderByChild('id').equalTo(firebaseUser.uid).once();
+            await userRef.child(firebaseUser.uid).once();
         Map<dynamic, dynamic> data = userData.value;
-        user = data.values.toList()[0];
-        await prefs.setString('id', data['id']);
-        await prefs.setString('email', data['email']);
-        await prefs.setString('password', data['password']);
-        await prefs.setString('confirmPassword', data['confirmPassword']);
-        await prefs.setString('firstName', data['firstName']);
-        await prefs.setString('lastName', data['lastName']);
-        await prefs.setString('phone number', data['phone number']);
-        await prefs.setString('gender', data['gender']);
-        await prefs.setInt('age', data['age']);
-        await prefs.setString('blood', data['blood']);
-        await prefs.setString('image0', data['image0']);
-        await prefs.setInt('birth_year', data['birth_year']);
-        await prefs.setInt('birth_month', data['birth_month']);
-        await prefs.setInt('birth_day', data['birth_day']);
-        await prefs.setString('intro', data['intro']);
-        await prefs.setString('createdAt', data['createdAt']);
-        await prefs.setBool('isLogin', true);
+        print(data);
+        user = data;
+        user['id'] = firebaseUser.uid;
+//        await prefs.setString('email', data['email']);
+//        await prefs.setString('password', data['password']);
+//        await prefs.setString('confirmPassword', data['confirmPassword']);
+//        await prefs.setString('firstName', data['firstName']);
+//        await prefs.setString('lastName', data['lastName']);
+//        await prefs.setString('phone number', data['phone number']);
+//        await prefs.setString('gender', data['gender']);
+//        await prefs.setInt('age', data['age']);
+//        await prefs.setString('blood', data['blood']);
+//        await prefs.setString('image0', data['image0']);
+//        await prefs.setInt('birth_year', data['birth_year']);
+//        await prefs.setInt('birth_month', data['birth_month']);
+//        await prefs.setInt('birth_day', data['birth_day']);
+//        await prefs.setString('intro', data['intro']);
+//        await prefs.setString('createdAt', data['createdAt']);
+//        await prefs.setBool('isLogin', true);
         widget.parentAction(false);
         Navigator.push(
           context,

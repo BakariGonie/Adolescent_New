@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:adolescentfinalyearproject/chat/chartDetailsPage.dart';
+import 'package:adolescentfinalyearproject/chat/globalConsultants.dart';
+import 'package:adolescentfinalyearproject/container/consultants.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -66,8 +68,8 @@ class Chat {
 
   Future<void> getChat() async {
     DataSnapshot snapshot =
-        await userRef.orderByChild('id').equalTo(user2).once();
-    var d = snapshot.value.values.toList()[0];
+        await consultantsRef.child(user2).once();
+    var d = snapshot.value;
     print(d);
     profile2 = new ChatUser(
         name: '${d['firstName']} ${d['lastName']}', isOnline: true, image: "assets/customer-avatar.png");

@@ -61,36 +61,18 @@ class _ChatLandingState extends State<ChatLanding> {
               stream: messageRef.onValue,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  List<Future<void>> futures = [];
                   List<Chat> chats = getChatUsers(snapshot.data.snapshot);
-                  chats.forEach((element) {
-                    futures.add(createFuture(element));
-                  });
-                  print(futures);
-
-                  return FutureBuilder(
-                      future: Future.wait(futures),
-                      builder: (context, snap) {
-                        if (snap.hasData) {
-                          return ListView.builder(
-                            itemCount: chats.length,
-                            shrinkWrap: true,
-                            padding: EdgeInsets.only(top: 16),
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return ChatUsersList(
-                                chat: chats[index],
-                              );
-                            },
-                          );
-                        } else {
-                          return Container(
-                            child: Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        }
-                      });
+                  return ListView.builder(
+                    itemCount: chats.length,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.only(top: 16),
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return ChatUsersList(
+                        chat: chats[index],
+                      );
+                    },
+                  );
                 } else if (snapshot.hasData &&
                     snapshot.data.snapshot.values.toList().isEmpty) {
                   return Center(

@@ -474,7 +474,7 @@ class _SignUpWithMail extends State<SignUpMain> {
             'role': 'adolescent'
           };
 
-          userRef.push().set(data);
+          userRef.child(firebaseUser.uid).set(data);
           user = data;
           // Write data to local
           currentUser = firebaseUser;

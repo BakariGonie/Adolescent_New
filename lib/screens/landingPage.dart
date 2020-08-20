@@ -19,7 +19,7 @@ class _LandingPageState extends State<LandingPage> {
 
   List<Widget> _widgets = <Widget>[
     HomeItemList(),
-    MapPinPointDirectives(),
+    HomePage(),
     ChatLanding(),
   ];
 

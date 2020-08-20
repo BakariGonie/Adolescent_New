@@ -1,7 +1,10 @@
 import 'package:adolescentfinalyearproject/chat/chartDetailsPage.dart';
 import 'package:adolescentfinalyearproject/chat/chatModel.dart';
+import 'package:adolescentfinalyearproject/container/consultants.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+
+import 'package:adolescentfinalyearproject/chat/globalConsultants.dart';
 
 import '../globals.dart';
 
@@ -11,15 +14,18 @@ class UserList extends StatefulWidget {
 }
 
 class _UserListState extends State<UserList> {
-  List<dynamic> users;
+  List<dynamic> consultants;
+  List<String> consultantKeys;
 
   @override
   void initState() {
-    userRef.once().then((DataSnapshot data) {
-      users = [];
+    consultantsRef.once().then((DataSnapshot data) {
+      consultants= [];
+      consultantKeys= [];
       data.value.forEach((key, value) {
         setState(() {
-          users.add(value);
+          consultants.add(value);
+          consultantKeys.add(key);
         });
       });
     });
@@ -32,25 +38,25 @@ class _UserListState extends State<UserList> {
       appBar: AppBar(
         title: Text('Select'),
       ),
-      body: users == null
+      body: consultants == null
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : users.isEmpty
+          : consultants.isEmpty
               ? Center(
                   child: Text('No users'),
                 )
               : ListView.builder(
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: Text(users[index]['firstName']),
+                      title: Text(consultants[index]['firstName']),
                       onTap: () {
-                        final chat = new Chat(key: user['id'] + users[index]['id']);
+                        final chat = new Chat(key: user['id'] + consultantKeys[index]);
                         chat.getChat().then((value) => Navigator.push(context, MaterialPageRoute(builder: (_)=> ChatDetailsPage(chat: chat))));
                       },
                     );
                   },
-                  itemCount: users.length,
+                  itemCount: consultants.length,
                 ),
     );
   }
